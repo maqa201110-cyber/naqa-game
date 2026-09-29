@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAQA GAMES</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #080711;
+            color: #ffffff;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            margin-top: 10px;
+        }
+        h1 {
+            font-size: 2.2rem;
+            color: #00f0ff;
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+            letter-spacing: 2px;
+            font-weight: 900;
+        }
+        p.subtitle {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        .games-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .game-card {
+            background: rgba(20, 20, 35, 0.85);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .game-title {
+            font-size: 1.4rem;
+            color: #00f0ff;
+            font-weight: bold;
+        }
+        .game-desc {
+            font-size: 0.85rem;
+            color: #ccc;
+            line-height: 1.4;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-play {
+            background: #00f0ff;
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+        }
+        .btn-apk {
+            background: #ff0055;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
+        }
+        .btn:active {
+            transform: scale(0.95);
+        }
+        footer {
+            margin-top: auto;
+            padding-top: 30px;
+            color: #666;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MAQA GAMES</h1>
+        <p class="subtitle">Android • iOS • PC Oyun Portalı</p>
+    </header>
+
+    <div class="games-container">
+
+        <!-- OYUN 1: NIGHT DRIFT 60 -->
+        <div class="game-card">
+            <div class="game-title">NIGHT DRIFT 60</div>
+            <div class="game-desc">Neon ışıklı şehirde 3D drift heyecanı. Virajları al, puanları topla ve nitro bas!</div>
+            <div class="btn-group">
+                <a href="drift.html" class="btn btn-play">▶ TARAYICIDA OYNA</a>
+                <a href="NIGHT_DRIFT_60.apk" class="btn btn-apk" download>📥 APK İNDİR</a>
+            </div>
+        </div>
+
+        <!-- OYUN 2: DOMINO FASTER -->
+        <div class="game-card">
+            <div class="game-title">DOMİNO FASTER</div>
+            <div class="game-desc">Hızlı tempolu, refleks odaklı domino oyunu. İster indirmeden oyna, ister APK yükle!</div>
+            <div class="btn-group">
+                <a href="domino.html" class="btn btn-play">▶ TARAYICIDA OYNA</a>
+                <a href="DOMINO_FASTER_1_1.apk" class="btn btn-apk" download>📥 APK İNDİR</a>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        © 2026 MAQA Games
+    </footer>
+
+</body>
+</html>
