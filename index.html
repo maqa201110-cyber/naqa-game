@@ -132,6 +132,14 @@
         const GITHUB_USERNAME = "maqa201110-cyber"; 
         const REPO_NAME = "naqa-game";
 
+        // Oyun ismini temizleyip ortak anahtar yapma fonksiyonu
+        function normalizeName(filename) {
+            let name = filename.replace(/\.[^/.]+$/, ""); // uzantıyı sil (.apk, .html)
+            name = name.replace(/[-_]/g, " "); // tire ve alt tireyi boşluk yap
+            name = name.replace(/\b(v\d*|version\d*|final|beta|demo)\b/gi, ""); // v1, v, version vs. sil
+            return name.trim().toUpperCase();
+        }
+
         async function fetchGames() {
             const container = document.getElementById('games-list');
             try {
@@ -139,7 +147,6 @@
                 if (!response.ok) throw new Error("GitHub bağlantı hatası");
                 
                 const files = await response.json();
-                
                 const gamesMap = {};
 
                 files.forEach(file => {
@@ -149,27 +156,26 @@
 
                     const ext = name.split('.').pop().toLowerCase();
                     if (ext === 'apk' || ext === 'html') {
-                        let cleanName = name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ").replace(/[0-9]/g, "").trim();
-                        if (!cleanName) cleanName = "OYUN";
+                        const gameKey = normalizeName(name) || "OYUN";
 
-                        if (!gamesMap[cleanName]) {
-                            gamesMap[cleanName] = { name: cleanName, apk: null, html: null };
+                        if (!gamesMap[gameKey]) {
+                            gamesMap[gameKey] = { displayName: gameKey, apk: null, html: null };
                         }
 
-                        if (ext === 'apk') gamesMap[cleanName].apk = file.download_url;
-                        if (ext === 'html') gamesMap[cleanName].html = file.name;
+                        if (ext === 'apk') gamesMap[gameKey].apk = file.download_url;
+                        if (ext === 'html') gamesMap[gameKey].html = file.name;
                     }
                 });
 
-                const gameKeys = Object.keys(gamesMap);
-                if (gameKeys.length === 0) {
+                const keys = Object.keys(gamesMap);
+                if (keys.length === 0) {
                     container.innerHTML = '<div class="loading">Henüz yüklü oyun bulunamadı.</div>';
                     return;
                 }
 
                 container.innerHTML = '';
 
-                gameKeys.forEach(key => {
+                keys.forEach(key => {
                     const game = gamesMap[key];
                     const card = document.createElement('div');
                     card.className = 'game-card';
@@ -184,7 +190,7 @@
                     buttonsHTML += '</div>';
 
                     card.innerHTML = `
-                        <div class="game-title">${game.name}</div>
+                        <div class="game-title">${game.displayName}</div>
                         <div class="game-desc">MAQA Games oyunu! Hemen tarayıcıda oyna veya cihazına indir.</div>
                         ${buttonsHTML}
                     `;
