@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="tr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a2e21">
+<title>DOMİNO FASTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Marcellus&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--felt1:#0e4630;--felt2:#082b1e;--ivory:#f7efdb;--gold:#d4a72c;--gold2:#f0cf6a;--red:#c1443a;--cyan:#3fd6c5;--txt:#f3ecd9;--dim:#9fc3ae;--bl:92px;--bw:46px}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}html,body{height:100%}
+body{font-family:'Nunito',system-ui,sans-serif;color:var(--txt);overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation;background:radial-gradient(120vmax 80vmax at 50% -10%,rgba(23,98,68,.55),transparent 60%),linear-gradient(180deg,var(--felt1),var(--felt2))}
+.disp{font-family:'Cinzel',Georgia,serif}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;overflow:hidden;padding-top:env(safe-area-inset-top,0px)}
+.screen.on{display:flex}
+.btn{font-family:'Cinzel',Georgia,serif;font-weight:700;letter-spacing:.5px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:1.5px solid rgba(212,167,44,.5);border-radius:12px;background:linear-gradient(180deg,var(--gold2),var(--gold));color:#3a2400;padding:13px 24px;font-size:15px;box-shadow:0 3px 10px rgba(0,0,0,.4);transition:transform .1s,filter .1s}
+.btn:active{transform:scale(.97);filter:brightness(.95)}
+.btn.red{background:linear-gradient(180deg,#d9645a,var(--red));color:#fff;border-color:#7a2a22}
+.btn.teal{background:linear-gradient(180deg,#7ee8db,var(--cyan));color:#03332d;border-color:#1c6459}
+.btn.ghost{background:rgba(255,255,255,.06);color:var(--txt);border-color:rgba(255,255,255,.18);box-shadow:none}
+.btn.big{font-size:clamp(16px,4vw,20px);padding:16px 40px;border-radius:14px}
+.btn.sm{padding:9px 14px;font-size:12.5px;border-radius:10px}
+.btn:disabled{opacity:.4;pointer-events:none}
+.bone{display:flex;position:relative;border-radius:9px;background:#f3ecda;box-shadow:0 2px 0 #b9ad8f,0 4px 7px rgba(0,0,0,.35),inset 0 0 0 1px rgba(0,0,0,.1)}
+.bone::after{content:'';position:absolute;left:50%;top:7%;bottom:7%;width:2px;transform:translateX(-50%);background:#cdc3a9}
+.bone.vert{flex-direction:column}
+.bone.vert::after{left:7%;right:7%;top:50%;bottom:auto;width:auto;height:2px;transform:translateY(-50%)}
+.half{flex:1;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);place-items:center;padding:9%;min-width:0;min-height:0}
+.pip{width:64%;aspect-ratio:1;border-radius:50%;background:#2a2119}
+.bone.dbl .pip{background:#2a2119}
+#menuCol{flex:1;display:flex;flex-direction:column;align-items:center;padding:max(6vh,26px) 16px calc(18px + env(safe-area-inset-bottom,0px))}
+#crest{width:74px;height:74px;border-radius:50%;border:2px solid var(--gold);display:grid;place-items:center;font-size:34px;margin-bottom:14px;background:radial-gradient(circle,rgba(212,167,44,.18),transparent 70%)}
+#tag{font-family:'Marcellus',Georgia,serif;letter-spacing:5px;font-size:11px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+#logoTop{font-family:'Cinzel',Georgia,serif;font-weight:800;font-size:clamp(40px,12vw,80px);line-height:1;color:var(--ivory);letter-spacing:1px}
+#logoFast{font-family:'Marcellus',Georgia,serif;font-size:clamp(20px,5.5vw,30px);letter-spacing:10px;color:var(--gold);margin-top:6px}
+.rule{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px 0}
+#btnPlay{margin-top:auto;width:min(280px,80vw)}
+#menuSmall{display:flex;gap:10px;margin-top:16px}
+#menuFoot{margin-top:auto;padding-top:18px;font-size:11.5px;font-weight:700;color:var(--dim);text-align:center;line-height:1.6}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 6px}
+.topbar h2{font-family:'Cinzel',Georgia,serif;font-size:clamp(15px,4.2vw,20px);letter-spacing:1px}
+.colCenter{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:8px 16px 24px;overflow:auto}
+.mode{display:flex;align-items:center;gap:14px;width:min(600px,94vw);padding:15px 16px;margin:5px 0;background:rgba(255,255,255,.04);border:1px solid rgba(212,167,44,.22);border-radius:14px;cursor:pointer}
+.mode:active{transform:scale(.985)}
+.mode .mi{width:52px;height:52px;flex:0 0 auto;display:grid;place-items:center;font-size:26px;border-radius:50%;background:rgba(212,167,44,.1);border:1px solid var(--ac,var(--gold))}
+.mode h3{font-family:'Cinzel',Georgia,serif;font-size:15px;letter-spacing:.5px;color:var(--ac,var(--gold))}
+.mode p{font-size:12px;color:var(--dim);font-weight:700;line-height:1.35;margin-top:2px}
+.mode .arw{margin-left:auto;font-size:20px;color:var(--ac,var(--gold))}
+.mode.die{--ac:#e0685c}.mode.onl{--ac:var(--cyan)}
+.panel{width:min(480px,94vw);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(212,167,44,.28);border-radius:20px;box-shadow:0 20px 50px rgba(0,0,0,.5);padding:22px 20px;text-align:center}
+.formPanel{text-align:left}
+.lbl{display:block;font-family:'Marcellus',Georgia,serif;font-size:11px;letter-spacing:2px;color:var(--dim);margin:14px 0 6px;text-transform:uppercase}
+.inp{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid rgba(212,167,44,.3);background:rgba(0,0,0,.28);color:var(--txt);font:700 15px 'Nunito',sans-serif;outline:none}
+.inp:focus{border-color:var(--gold)}
+.seg,.tabs{display:flex;gap:8px}.tabs{margin:14px 0 4px}
+.seg button,.tabs button{flex:1;padding:10px 4px;font-family:'Marcellus',Georgia,serif;letter-spacing:.5px;font-size:12.5px;border-radius:10px;border:1.5px solid rgba(212,167,44,.25);background:rgba(0,0,0,.22);color:var(--dim);cursor:pointer}
+.seg button.sel{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#3a2400;border-color:var(--gold)}
+.tabs button.sel{background:linear-gradient(180deg,#7ee8db,var(--cyan));color:#03332d;border-color:#1c6459}
+.chk{display:flex;gap:8px;align-items:center;font-weight:700;font-size:13px;margin-top:12px}
+.chk input{width:18px;height:18px;accent-color:var(--gold)}
+.avrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:rgba(0,0,0,.25);border:2px solid transparent;cursor:pointer}
+.av.sel{border-color:var(--gold);background:rgba(212,167,44,.18)}
+#skull{font-size:52px}
+#roomCodeBig{font-family:'Cinzel',Georgia,serif;font-size:clamp(32px,9vw,48px);letter-spacing:8px;color:var(--cyan);text-align:center}
+.seat{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.25);border:1px solid rgba(212,167,44,.2);border-radius:12px;padding:9px 12px;margin-top:8px;font-weight:700;font-size:13.5px}
+.seat .av{width:30px;height:30px;font-size:16px}
+.seat.empty{opacity:.45;border-style:dashed}
+.namerow{display:flex;align-items:center;gap:10px;margin-top:10px}
+.namerow .av{flex:none}
+.namerow .inp{flex:1}
+#hud{display:flex;align-items:center;gap:6px;padding:8px 12px 0;font-family:'Marcellus',Georgia,serif}
+.ib{width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(212,167,44,.35);background:transparent;color:var(--txt);font-size:17px;cursor:pointer;display:grid;place-items:center;flex:none;font-family:inherit}
+#ttl{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3;padding-left:4px}
+#ttl b{font-family:'Cinzel',Georgia,serif;font-weight:600;letter-spacing:2.5px;font-size:12.5px;white-space:nowrap}
+#ttl small{letter-spacing:1.5px;font-size:9.5px;color:var(--dim);white-space:nowrap}
+#scs{display:flex;gap:12px;text-align:center}
+#scs small{display:block;font-size:9.5px;letter-spacing:2px;color:var(--dim)}
+#scs b{font-size:24px;font-weight:700;color:var(--txt)}
+#scs b.lead{color:var(--gold)}
+#timerWrap{height:3px;margin:8px 12px 0;border-radius:99px;background:rgba(0,0,0,.4);overflow:hidden;display:none}
+#timerWrap.on{display:block}
+#timerFill{height:100%;width:100%;background:linear-gradient(90deg,var(--gold),var(--red));transition:width .1s linear}
+body.danger #boardWrap{box-shadow:inset 0 0 70px rgba(193,68,58,.4)}
+#pchips{display:flex;gap:8px;overflow-x:auto;padding:10px 12px;justify-content:center}
+.pchip{flex:0 0 auto;display:flex;align-items:center;gap:6px;font-family:'Marcellus',Georgia,serif;border:1.5px solid rgba(212,167,44,.35);background:rgba(120,90,20,.15);padding:5px 12px 5px 6px;border-radius:99px;font-size:13.5px;color:var(--txt)}
+.pchip .av{width:24px;height:24px;font-size:14px}
+.pchip.act{border-color:var(--gold);box-shadow:0 0 10px rgba(212,167,44,.35)}
+#boardWrap{flex:1;position:relative;overflow:hidden;min-height:0}
+#cam{position:absolute;left:50%;top:50%;width:0;height:0;transform-origin:0 0;transition:transform .5s ease}
+#tl,#fx{position:absolute;left:0;top:0}
+.bt{position:absolute}.bt .bone{width:100%;height:100%}
+.bt.pop .bone{animation:pop .45s cubic-bezier(.2,1.5,.4,1)}
+@keyframes pop{from{transform:scale(1.8) rotate(-10deg);opacity:0}}
+.bt.last .bone{box-shadow:0 0 0 3px var(--gold),0 4px 14px rgba(212,167,44,.5)}
+.mk{position:absolute;border:2px dashed var(--gold);border-radius:8px;background:rgba(212,167,44,.12);animation:mkp .7s infinite alternate}
+.mk.hot{background:rgba(212,167,44,.5);border-style:solid}
+@keyframes mkp{to{transform:scale(1.08)}}
+.pts{position:absolute;font-family:'Cinzel',Georgia,serif;font-weight:800;color:var(--gold);text-shadow:0 3px 0 #000;pointer-events:none;z-index:5;white-space:nowrap;animation:ptsUp 1.5s ease-out forwards}
+@keyframes ptsUp{from{opacity:0;transform:translate(-50%,-20%) scale(.4)}20%{opacity:1;transform:translate(-50%,-90%) scale(1.3)}to{opacity:0;transform:translate(-50%,-260%)}}
+.dragg{position:fixed;z-index:50;pointer-events:none;width:46px;height:92px;transform:translate(-50%,-60%) scale(1.2) rotate(6deg);filter:drop-shadow(0 14px 12px rgba(0,0,0,.55))}
+.dragg .bone{width:100%;height:100%}
+.pzt{width:44px;height:70px;border-radius:8px;background:repeating-linear-gradient(45deg,#8a5a2b 0 6px,#5b3921 6px 12px);border:1px solid rgba(255,255,255,.25);cursor:pointer;transition:transform .35s}
+.pzt:active,.pzt.flip{transform:rotateY(90deg) scale(1.2)}
+#tray{display:flex;gap:10px;align-items:center;padding:4px 14px calc(10px + env(safe-area-inset-bottom,0px))}
+#hand{flex:none;display:flex;gap:10px;overflow-x:auto;padding:26px 8px 8px;justify-content:safe center;align-items:flex-end;min-height:calc(var(--bl) + 34px)}
+.htile{flex:0 0 auto;width:var(--bw);height:var(--bl);cursor:pointer;position:relative;touch-action:pan-x}
+.htile .bone{width:100%;height:100%}
+.htile.can .bone{box-shadow:0 0 0 3px var(--gold),0 6px 16px rgba(212,167,44,.45);transform:translateY(-8px)}
+.htile.sel .bone{transform:translateY(-16px)}
+.htile.dim{filter:grayscale(1) brightness(.72);opacity:.85}
+#turnName{flex:none;font-family:'Marcellus',Georgia,serif;color:var(--gold);font-size:clamp(13px,3.6vw,17px);padding:4px;text-align:center}
+#acts{display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
+.chip{font-family:'Marcellus',Georgia,serif;font-size:15px}
+@media(max-width:520px){:root{--bl:76px;--bw:39px}}
+.overlay{position:fixed;inset:0;display:none;place-items:center;background:rgba(3,16,11,.85);z-index:20;padding:16px}
+.overlay.on{display:grid}
+#howList{list-style:none}
+#howList li{margin:9px 0;font-weight:700;color:#d9e8dc;font-size:13.5px;line-height:1.45}
+#howList li::before{content:'◆ ';color:var(--gold)}
+#toasts{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:60;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;max-width:92vw}
+.toast{background:rgba(6,32,23,.95);border:1.5px solid var(--gold);padding:9px 18px;border-radius:99px;font-weight:800;font-size:13px}
+.toast.err{border-color:var(--red)}
+#passOv{position:fixed;inset:0;z-index:15;display:none;place-items:center;background:rgba(3,16,11,.94);text-align:center;padding:20px}
+#passOv.on{display:grid}
+#passAv{width:84px;height:84px;border-radius:50%;background:rgba(212,167,44,.15);border:2px solid var(--gold);display:grid;place-items:center;font-size:42px;margin:0 auto 14px}
+.statRow{display:flex;justify-content:space-between;padding:10px 4px;border-bottom:1px solid rgba(255,255,255,.08);font-weight:700}
+.statRow b{color:var(--gold);font-size:17px}
+.cf{position:absolute;top:-16px;width:8px;height:14px;border-radius:2px;animation:cfall linear forwards}
+@keyframes cfall{to{transform:translateY(420px) rotate(600deg);opacity:.6}}
+</style></head><body>
+
+<section class="screen on" id="scr-menu"><div id="menuCol">
+  <div id="crest">🁫</div>
+  <div id="tag">Hızlı Domino Arenası</div>
+  <div style="text-align:center"><h1 id="logoTop">DOMİNO</h1><div id="logoFast">F A S T E R</div></div>
+  <div class="rule"></div>
+  <button class="btn big" id="btnPlay">▶ &nbsp;OYNA</button>
+  <div id="menuSmall">
+    <button class="btn ghost sm" id="btnHow">Nasıl Oynanır</button>
+    <button class="btn ghost sm" id="btnStats">İstatistik</button>
+    <button class="btn ghost sm" id="btnSnd">🔊 Ses</button>
+  </div>
+  <div id="menuFoot">📱 iOS · 🤖 Android · 💻 Tarayıcı — kurulum yok, direkt oyna!<br><span style="opacity:.6">DOMİNO FASTER v2.0</span></div>
+</div></section>
+
+<section class="screen" id="scr-modes">
+  <header class="topbar"><button class="btn ghost sm back" data-to="menu">◀</button><h2 class="disp">MOD SEÇ</h2><span style="width:44px"></span></header>
+  <div class="colCenter">
+    <div class="mode" data-go="bot"><div class="mi">🤖</div><div><h3>BOT MOD</h3><p>Yapay zekâya karşı. 3 zorluk, Klasik veya Puanlı oyun.</p></div><span class="arw">➜</span></div>
+    <div class="mode die" data-go="die"><div class="mi">💀</div><div><h3>DIE MOD</h3><p>Hamle başına 6 saniye. Süre dolarsa sıra rakibe geçer.</p></div><span class="arw">➜</span></div>
+    <div class="mode" data-go="local"><div class="mi">👥</div><div><h3>YEREL ÇOKLU</h3><p>Aynı cihazda 2-4 kişi, elden ele oynayın.</p></div><span class="arw">➜</span></div>
+    <div class="mode onl" data-go="online"><div class="mi">🌐</div><div><h3>ONLİNE MOD</h3><p>Oda kur, kodu ve şifreyi paylaş, 2-4 kişiyle oyna.</p></div><span class="arw">➜</span></div>
+  </div>
+</section>
+
+<section class="screen" id="scr-bot">
+  <header class="topbar"><button class="btn ghost sm back" data-to="modes">◀</button><h2 class="disp">BOT MOD</h2><span style="width:44px"></span></header>
+  <div class="colCenter"><div class="panel formPanel">
+    <label class="lbl">Adın</label><input class="inp" id="botName" maxlength="12" placeholder="SEN">
+    <label class="lbl">Avatar</label><div class="avrow" id="botAv"></div>
+    <label class="lbl">Zorluk</label>
+    <div class="seg" id="botDiff"><button data-d="easy">KOLAY</button><button data-d="normal" class="sel">NORMAL</button><button data-d="pro">ZOR</button></div>
+    <label class="lbl">Oyun Tipi</label>
+    <div class="seg" id="botType"><button data-v="classic" class="sel">KLASİK</button><button data-v="score">PUANLI ⚡</button></div>
+    <label class="lbl">Hedef Puan</label>
+    <div class="seg" id="botTarget"><button data-t="100" class="sel">100</button><button data-t="200">200</button><button data-t="365">365</button></div>
+    <button class="btn big" id="botStart" style="margin-top:22px;width:100%">MAÇI BAŞLAT</button>
+  </div></div>
+</section>
+
+<section class="screen" id="scr-die">
+  <header class="topbar"><button class="btn ghost sm back" data-to="modes">◀</button><h2 class="disp">DIE MOD</h2><span style="width:44px"></span></header>
+  <div class="colCenter"><div class="panel formPanel">
+    <div style="text-align:center"><div id="skull">💀</div><h3 class="disp" style="color:var(--red);font-size:19px;margin-top:6px">CESARETİN VAR MI?</h3></div>
+    <p style="color:var(--dim);font-weight:700;margin:10px 0 2px;font-size:13px;line-height:1.5">Her hamle için <b style="color:var(--red)">6 saniyen</b> var. Süre dolarsa sıra rakibe geçer. Kilitlenirse sıkışan kaybeder. Rakip: ÖLÜM BOTU (zor).</p>
+    <label class="lbl">Adın</label><input class="inp" id="dieName" maxlength="12" placeholder="SEN">
+    <label class="lbl">Avatar</label><div class="avrow" id="dieAv"></div>
+    <button class="btn red big" id="dieStart" style="width:100%;margin-top:18px">💀 HAYATTA KAL</button>
+  </div></div>
+</section>
+
+<section class="screen" id="scr-local">
+  <header class="topbar"><button class="btn ghost sm back" data-to="modes">◀</button><h2 class="disp">YEREL ÇOKLU</h2><span style="width:44px"></span></header>
+  <div class="colCenter"><div class="panel formPanel">
+    <label class="lbl">Oyuncu Sayısı</label>
+    <div class="seg" id="locN"><button data-n="2" class="sel">2</button><button data-n="3">3</button><button data-n="4">4</button></div>
+    <div id="locNames"></div>
+    <label class="lbl">Oyun Tipi</label>
+    <div class="seg" id="locType"><button data-v="classic" class="sel">KLASİK</button><button data-v="score">PUANLI ⚡</button></div>
+    <label class="lbl">Hedef Puan</label>
+    <div class="seg" id="locTarget"><button data-t="100" class="sel">100</button><button data-t="200">200</button><button data-t="365">365</button></div>
+    <button class="btn big" id="locStart" style="margin-top:22px;width:100%">BAŞLAT</button>
+  </div></div>
+</section>
+
+<section class="screen" id="scr-online">
+  <header class="topbar"><button class="btn ghost sm back" data-to="modes">◀</button><h2 class="disp">ONLİNE MOD</h2><span style="width:44px"></span></header>
+  <div class="colCenter" style="justify-content:flex-start"><div class="panel formPanel">
+    <label class="lbl">Adın</label><input class="inp" id="onlName" maxlength="12" placeholder="SEN">
+    <label class="lbl">Avatar</label><div class="avrow" id="onlAv"></div>
+    <div class="tabs"><button id="tabJoin" class="sel">KATIL</button><button id="tabCreate">ODA KUR</button></div>
+    <div id="joinPane">
+      <label class="lbl">Oda Kodu</label><input class="inp" id="joinCode" maxlength="4" placeholder="K7QX" style="text-transform:uppercase;letter-spacing:8px;text-align:center;font-family:'Cinzel',Georgia,serif;font-size:20px">
+      <label class="lbl">Şifre (varsa)</label><input class="inp" id="joinPass" placeholder="boş bırakılabilir">
+      <button class="btn teal" id="btnJoin" style="width:100%;margin-top:16px">Odaya Katıl ➜</button>
+    </div>
+    <div id="createPane" style="display:none">
+      <label class="lbl">Oda Adı</label><input class="inp" id="roomName" maxlength="18" placeholder="örn: Krallar Masası">
+      <div style="display:flex;gap:10px"><div style="flex:1"><label class="lbl">Şifre (opsiyonel)</label><input class="inp" id="roomPass" maxlength="10" placeholder="yok"></div>
+      <div style="flex:1"><label class="lbl">Kişi Sayısı</label><div class="seg" id="roomMax"><button data-m="2" class="sel">2</button><button data-m="3">3</button><button data-m="4">4</button></div></div></div>
+      <label class="lbl">Oyun Tipi</label>
+      <div class="seg" id="roomType"><button data-v="classic" class="sel">KLASİK</button><button data-v="score">PUANLI ⚡</button></div>
+      <label class="lbl">Hedef Puan</label>
+      <div class="seg" id="roomTarget"><button data-t="100" class="sel">100</button><button data-t="200">200</button><button data-t="365">365</button></div>
+      <label class="chk"><input type="checkbox" id="roomPriv" checked> 🔒 Özel oda (sadece kodla girilir)</label>
+      <button class="btn teal" id="btnCreate" style="width:100%;margin-top:14px">Oda Kur 🏠</button>
+    </div>
+  </div></div>
+</section>
+
+<section class="screen" id="scr-lobby">
+  <header class="topbar"><button class="btn ghost sm" id="lobbyBack">◀</button><h2 class="disp" id="lobbyTitle">ODA</h2><span style="width:44px"></span></header>
+  <div class="colCenter"><div class="panel">
+    <div class="lbl" style="text-align:center">ODA KODU</div><div id="roomCodeBig">----</div>
+    <div id="seats"></div>
+    <button class="btn teal" id="btnStart" style="width:100%;margin-top:18px">BAŞLAT ▶</button>
+    <p id="lobbyNote" style="color:var(--dim);font-weight:700;font-size:12.5px;margin-top:12px"></p>
+  </div></div>
+</section>
+
+<section class="screen" id="scr-stats">
+  <header class="topbar"><button class="btn ghost sm back" data-to="menu">◀</button><h2 class="disp">İSTATİSTİK</h2><span style="width:44px"></span></header>
+  <div class="colCenter"><div class="panel">
+    <div class="statRow"><span>Oynanan Maç</span><b id="stG">0</b></div>
+    <div class="statRow"><span>Kazanılan Maç</span><b id="stW">0</b></div>
+    <div class="statRow"><span>Kazanma Oranı</span><b id="stR">%0</b></div>
+    <div class="statRow" style="border:0"><span>En Yüksek Skor</span><b id="stB">0</b></div>
+    <button class="btn ghost sm" id="stReset" style="margin-top:18px;width:100%">İstatistikleri Sıfırla</button>
+  </div></div>
+</section>
+
+<section class="screen" id="scr-game">
+  <div id="hud"><button class="ib" id="gQuit">✕</button><button class="ib" id="gHelp">?</button>
+    <div id="ttl"><b>DOMİNO FASTER</b><small id="subT"></small></div>
+    <div id="scs"><div><small id="me0">SEN</small><b id="sc0">0</b></div><div><small id="oppL">RAKİP</small><b id="sc1">0</b></div></div></div>
+  <div id="timerWrap"><div id="timerFill"></div></div>
+  <div id="pchips"></div>
+  <div id="boardWrap"><div id="cam"><div id="tl"></div><div id="fx"></div></div></div>
+  <div id="turnName"></div>
+  <div id="hand"></div>
+  <div id="tray"><span class="chip" id="bagChip"></span><span class="chip" id="timeChip"></span><div id="acts"><button class="btn sm" id="drawB">ÇEK</button><button class="btn sm ghost" id="passB">PAS</button><button class="btn sm teal" id="pickL" style="display:none">◀ SOL</button><button class="btn sm teal" id="pickR" style="display:none">SAĞ ▶</button></div></div>
+</section>
+
+<div class="overlay" id="ov"><div class="panel"><div id="ovBody"></div><button class="btn big" id="ovBtn" style="margin-top:18px;font-size:17px;padding:14px 30px"></button><button class="btn ghost sm" id="ovBtn2" style="margin-top:14px;display:none">MENÜYE DÖN</button></div></div>
+<div class="overlay" id="pz" style="background:rgba(0,0,0,.62)"><div class="panel" style="width:min(520px,92vw)"><h3 class="disp" id="pzT" style="font-size:20px">Pazardan Çek</h3><p id="pzS" style="color:var(--dim);font-weight:700;margin:6px 0 18px;font-size:13px"></p><div id="pzGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;justify-items:center"></div></div></div>
+<div id="passOv"><div><div id="passAv">🙂</div><div class="disp" style="font-size:22px;color:var(--gold)" id="passName"></div><p style="color:var(--dim);font-weight:700;margin:8px 0 18px">Cihazı bu oyuncuya ver</p><button class="btn big" id="passGo">HAZIRIM ▶</button></div></div>
+<div id="toasts"></div>
+
+<script>
+const $=i=>document.getElementById(i);
+const PIPS=[[],[4],[0,8],[0,4,8],[0,2,6,8],[0,2,4,6,8],[0,2,3,5,6,8]];
+const AV=['🦁','🐯','🦊','🐺','🐸','🦅','🐉','🦄','🐙','🐢','🦂','🐼'];
+const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let mode='',diff='normal',s=null,me=0,sel=-1,snd=true,room=null,myId=Math.random().toString(36).slice(2),ids=[],isHost=false,offs=[],hiTimer=null,lob=null,tk=Date.now(),shown=null,myName='SEN';
+let cfg={n:2,names:['SEN','BOT'],avatars:['🦁','🤖'],type:'classic',target:100};
+let localLastShown=-1,pendingLocalSwitch=false;
+function vib(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+function show(id){document.querySelectorAll('.screen').forEach(e=>e.classList.toggle('on',e.id==='scr-'+id))}
+function toast(m,e){const d=document.createElement('div');d.className='toast'+(e?' err':'');d.textContent=m;$('toasts').appendChild(d);setTimeout(()=>d.remove(),2400)}
+function beep(f,d){if(!snd)return;try{const c=beep.c||(beep.c=new(window.AudioContext||window.webkitAudioContext)()),o=c.createOscillator(),g=c.createGain();o.frequency.value=f;g.gain.value=.06;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+(d||.08))}catch(e){}}
+function bone(t,cls){let h='<div class="bone '+(cls||'')+(t[0]===t[1]?' dbl':'')+'">';t.forEach(n=>{h+='<div class="half">';for(let i=0;i<9;i++)h+=PIPS[n].includes(i)?'<i class="pip"></i>':'<span></span>';h+='</div>'});return h+'</div>'}
+/* --- avatar / segment seçiciler --- */
+function avRow(id,cur){$(id).innerHTML=AV.map((a,i)=>'<div class="av'+(a===cur?' sel':'')+'" data-a="'+a+'">'+a+'</div>').join('');
+  $(id).querySelectorAll('.av').forEach(e=>e.onclick=()=>{$(id).querySelectorAll('.av').forEach(x=>x.classList.remove('sel'));e.classList.add('sel')})}
+function avVal(id){const e=$(id).querySelector('.av.sel');return e?e.dataset.a:AV[0]}
+function segBind(id){$(id).onclick=e=>{const b=e.target.closest('button');if(!b)return;$(id).querySelectorAll('button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')}}
+function segVal(id,attr){return $(id).querySelector('.sel').dataset[attr]}
+['botAv','dieAv','onlAv'].forEach((id,i)=>avRow(id,AV[i%AV.length]));
+['botDiff','botType','botTarget','locN','locType','locTarget','roomMax','roomType','roomTarget'].forEach(segBind);
+function renderLocNames(){
+  const n=+segVal('locN','n');let h='';
+  for(let i=0;i<n;i++)h+='<div class="namerow"><div class="av sel" data-a="'+AV[i]+'" data-i="'+i+'">'+AV[i]+'</div><input class="inp" maxlength="12" placeholder="Oyuncu '+(i+1)+'" value="Oyuncu '+(i+1)+'"></div>';
+  $('locNames').innerHTML=h;
+  $('locNames').querySelectorAll('.namerow').forEach((row)=>{
+    row.querySelector('.av').onclick=()=>{
+      const cur=AV.indexOf(row.querySelector('.av').dataset.a),nx=AV[(cur+1)%AV.length];
+      row.querySelector('.av').dataset.a=nx;row.querySelector('.av').textContent=nx};
+  });
+}
+renderLocNames();$('locN').addEventListener('click',()=>setTimeout(renderLocNames,0));
+/* --- istatistik --- */
+function loadStats(){try{return JSON.parse(localStorage.getItem('df_stats')||'{}')}catch(e){return{}}}
+function saveStats(o){try{localStorage.setItem('df_stats',JSON.stringify(o))}catch(e){}}
+function recordMatch(won,score){if(mode!=='bot'&&mode!=='die')return;const st=loadStats();st.games=(st.games||0)+1;if(won)st.wins=(st.wins||0)+1;st.best=Math.max(st.best||0,score||0);saveStats(st)}
+function showStats(){const st=loadStats(),g=st.games||0,w=st.wins||0;$('stG').textContent=g;$('stW').textContent=w;$('stR').textContent='%'+(g?Math.round(w/g*100):0);$('stB').textContent=st.best||0;show('stats')}
+$('btnStats').onclick=showStats;
+$('stReset').onclick=()=>{saveStats({});showStats();toast('İstatistikler sıfırlandı')};
+/* --- konfeti --- */
+function confetti(){const cols=['#d4a72c','#f0cf6a','#3fd6c5','#c1443a','#f3ecda'];for(let i=0;i<26;i++){const d=document.createElement('div');d.className='cf';d.style.left=(45+Math.random()*10)+'%';d.style.background=cols[i%cols.length];d.style.animationDuration=(1+Math.random()*.8)+'s';document.getElementById('ov').appendChild(d);setTimeout(()=>d.remove(),2000)}}
+/* --- oyun mantığı --- */
+function setTurn(x){s.t=x;s.tid=Math.random();s.dur=mode==='die'?6:10+(Math.random()*20|0)}
+function place(b,t,side){const l=b[0][0],r=b[b.length-1][1],c=b.slice();if(side==='L')c.unshift(t[1]===l?[t[0],t[1]]:[t[1],t[0]]);else c.push(t[0]===r?[t[0],t[1]]:[t[1],t[0]]);return c}
+function ptsOf(b){if(b.length===1)return b[0][0]+b[0][1];const f=b[0],l=b[b.length-1];return(f[0]===f[1]?2:1)*f[0]+(l[0]===l[1]?2:1)*l[1]}
+const scr=b=>{const x=ptsOf(b);return x>0&&x%5===0?x:0};
+function award(p){if(cfg.type!=='score')return;const x=scr(s.b);if(x){s.sc[p]+=x;s.pop={p,pts:x,id:Math.random()}}}
+function newRound(sc){
+  let a=[];for(let x=0;x<7;x++)for(let y=x;y<7;y++)a.push([x,y]);
+  for(let i=27;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}
+  const n=cfg.n,h=[];for(let p=0;p<n;p++)h.push(a.splice(0,7));
+  let best=-1,bp=0,bi=0;h.forEach((hd,p)=>hd.forEach((t,i)=>{const v=(t[0]===t[1]?100:0)+t[0]+t[1];if(v>best){best=v;bp=p;bi=i}}));
+  s={n,names:cfg.names,avatars:cfg.avatars,h,bag:a,b:[h[bp].splice(bi,1)[0]],t:0,pass:0,over:null,sc:sc||cfg.names.map(()=>0),nl:0,nr:0,side:'R',pop:null,seed:Math.random()*1e9|0};
+  award(bp);setTurn((bp+1)%n);
+  if(mode==='local'){localLastShown=-1}
+}
+const ends=()=>[s.b[0][0],s.b[s.b.length-1][1]];
+const sum=h=>h.reduce((x,t)=>x+t[0]+t[1],0);
+function moves(p){const[l,r]=ends(),m=[];s.h[p].forEach((t,i)=>{if(t[0]===l||t[1]===l)m.push([i,'L']);if((t[0]===r||t[1]===r)&&!(l===r&&m.length&&m[m.length-1][0]===i))m.push([i,'R'])});return m}
+function doPlay(p,i,side){
+  const t=s.h[p].splice(i,1)[0];
+  s.b=place(s.b,t,side);if(side==='L')s.nl++;else s.nr++;
+  s.pass=0;s.side=side;beep(520);vib(15);award(p);
+  if(!s.h[p].length)return finish(p);
+  setTurn((p+1)%s.n);
+}
+function finish(w,stuck){
+  const tot=s.h.map(sum);
+  if(w<0){
+    if(mode==='die'){w=stuck===0?1:0}
+    else{const m=Math.min(...tot);const ws=tot.map((v,i)=>v===m?i:-1).filter(i=>i>=0);if(ws.length>1){s.over={w:-1,pts:0};return}w=ws[0]}
+  }
+  const pts=tot.reduce((x,v,i)=>i===w?x:x+v,0);s.sc[w]+=pts;s.over={w,pts};
+}
+function drawT(p){s.h[p].push(s.bag.pop());beep(300);vib(10)}
+function passT(p){s.pass++;setTurn((p+1)%s.n);if(s.pass>=s.n)finish(-1,p)}
+function sync(){
+  if(mode==='online'&&room)room.emit('g',{t:'st',s,from:myId,ids}).catch(()=>{});
+  if(mode==='local')me=s.t;
+  render();
+  if((mode==='bot'||mode==='die')&&s.t===1&&!s.over)setTimeout(botMove,700);
+}
+function botMove(){
+  if(!s||s.t!==1||s.over||(mode!=='bot'&&mode!=='die'))return;
+  const h=s.h[1],mv=moves(1);
+  if(mv.length){
+    const lvl=mode==='die'?'pro':diff;let pick=mv[Math.random()*mv.length|0];
+    if(lvl!=='easy'){let bs=-1e9;const[l,r]=ends();mv.forEach(m=>{const t=h[m[0]];
+      const ne=m[1]==='L'?(t[0]===l?t[1]:t[0]):(t[0]===r?t[1]:t[0]);
+      let sc=t[0]+t[1]+(t[0]===t[1]?3:0);
+      if(lvl==='pro')sc+=h.filter((x,k)=>k!==m[0]&&(x[0]===ne||x[1]===ne)).length*4;
+      if(sc>bs){bs=sc;pick=m}})}
+    doPlay(1,pick[0],pick[1]);sync();
+  }else if(s.bag.length){drawT(1);render();setTimeout(botMove,550)}
+  else{passT(1);sync()}
+}
+function autoMove(){
+  for(;;){const mv=moves(me);
+    if(mv.length){const m=mv[Math.random()*mv.length|0];doPlay(me,m[0],m[1]);break}
+    if(s.bag.length)drawT(me);else{passT(me);break}}
+  toast('⏱ Süre doldu! Sıra geçti',1);sync();
+}
+setInterval(()=>{
+  if(!s||!$('scr-game').classList.contains('on')||s.over||$('passOv').classList.contains('on')){$('timeChip').textContent='';document.body.classList.remove('danger');return}
+  const on=mode==='die'&&s.t===me;
+  $('timerWrap').classList.toggle('on',mode==='die');
+  if(!on){document.body.classList.remove('danger');$('timerFill').style.width='100%';return}
+  const left=Math.max(0,6000-(Date.now()-tk));
+  $('timerFill').style.width=left/60+'%';$('timeChip').textContent='⏱ '+Math.ceil(left/1000);
+  document.body.classList.toggle('danger',left<2000);
+  if(left<=0&&!$('ov').classList.contains('on'))autoMove();
+},100);
+/* --- yılan dizilim motoru --- */
+const GAP=2,XR=140;
+const mir=p=>({l:-p.r,r:-p.l,t:-p.b,b:-p.t,w:p.w,h:p.h,x:-p.x,y:-p.y,hx:p.hx,hy:p.hy});
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function arm(ts,cw,ch,seed){
+  const R=rng(seed),o=[],mk=(l,tp,w,h,hx,hy)=>({l,t:tp,w,h,r:l+w,b:tp+h,x:l+w/2,y:tp+h/2,hx,hy});
+  let prev={l:-cw/2,r:cw/2,t:-ch/2,b:ch/2},mode2='row',head=1,rowY=0,edge=0,first=false,left=2+(R()*3|0),tc=0,tn=1;
+  for(const t of ts){
+    const D=t[0]===t[1];let w,h,p;
+    if(mode2==='row'){
+      w=D?32:64;h=D?64:32;
+      const l=first?(head>0?prev.l:prev.r-w):(head>0?prev.r+GAP:prev.l-GAP-w);
+      if(!first&&(left<=0||(head>0?l+w>XR:l<-XR))){mode2='turn';edge=head>0?prev.r:prev.l;tc=0;tn=1+(R()*3|0)}
+      else{if(first){rowY=prev.b+GAP+h/2;first=false}
+        p=mk(l,rowY-h/2,w,h,head,0);o.push(p);prev=p;left--;continue}
+    }
+    w=D?64:32;h=D?32:64;
+    p=mk(head>0?edge-w:edge,prev.b+GAP,w,h,0,1);o.push(p);prev=p;
+    if(++tc>=tn){mode2='row';first=true;head=prev.r>XR-90?-1:(prev.l<-XR+90?1:(R()<.5?1:-1));left=2+(R()*4|0)}
+  }
+  return o}
+function layout(){
+  const c=s.b[s.nl],D=c[0]===c[1],cw=D?32:64,ch=D?64:32,pos=[],sd=s.seed||1,s2=sd^0x5bd1e995;
+  pos[s.nl]={l:-cw/2,t:-ch/2,w:cw,h:ch,r:cw/2,b:ch/2,x:0,y:0,hx:1,hy:0};
+  const R=s.b.slice(s.nl+1),Lr=s.b.slice(0,s.nl).reverse(),NT=[0,1];
+  arm(R,cw,ch,sd).forEach((p,k)=>{pos[s.nl+1+k]=p});
+  arm(Lr,cw,ch,s2).forEach((p,k)=>{pos[s.nl-1-k]=mir(p)});
+  const rs=arm(R.concat([NT]),cw,ch,sd).pop(),ls=arm(Lr.concat([NT]),cw,ch,s2).pop();
+  return{pos,slots:{R:rs,L:mir(ls)}}}
+function slot(sd){return layout().slots[sd]}
+/* --- çizim --- */
+let lastPop=null,lastLen=0,dr=null,pzOpen=false,pzBusy=false;
+function render(){
+  if(!s)return;
+  if(mode==='local'&&!s.over&&s.t!==localLastShown&&!pendingLocalSwitch){pendingLocalSwitch=true;showPassOv()}
+  const wr=$('boardWrap'),nb=s.b.length,ni=s.side==='L'?0:nb-1,grew=nb>lastLen&&lastLen>0;
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9,h='';
+  const LY=layout();const ext=r=>{x0=Math.min(x0,r.l);x1=Math.max(x1,r.r);y0=Math.min(y0,r.t);y1=Math.max(y1,r.b)};
+  s.b.forEach((t,i)=>{const p=LY.pos[i];ext(p);
+    h+='<div class="bt'+(grew&&i===ni?' pop':'')+(nb>1&&i===ni?' last':'')+'" style="left:'+p.l+'px;top:'+p.t+'px;width:'+p.w+'px;height:'+p.h+'px">'+bone(p.hx<0?[t[1],t[0]]:t,p.h>p.w?'vert':'')+'</div>'});
+  ext(LY.slots.L);ext(LY.slots.R);
+  $('tl').innerHTML=h;
+  const sc=Math.min(1.5,wr.clientWidth/(x1-x0+30),wr.clientHeight/(y1-y0+30))||1;
+  $('cam').style.transform='scale('+sc+') translate('+(-(x0+x1)/2)+'px,'+(-(y0+y1)/2)+'px)';
+  if(s.pop&&s.pop.id!==lastPop){lastPop=s.pop.id;const p=LY.pos[nb===1?0:ni];
+    $('fx').insertAdjacentHTML('beforeend','<div class="pts" style="left:'+p.x+'px;top:'+(p.y-20)+'px;font-size:'+Math.round(30/sc)+'px">+'+s.pop.pts+'</div>');
+    setTimeout(()=>{const e=$('fx').querySelector('.pts');if(e)e.remove()},1600);
+    toast(s.names[s.pop.p]+' +'+s.pop.pts+' puan!');beep(760);vib(20)}
+  lastLen=nb;
+  const mine=s.t===me&&!s.over,mv=mine?moves(me):[];
+  const opp=s.names.map((n,i)=>i).filter(i=>i!==me),best=Math.max(...opp.map(i=>s.sc[i]));
+  $('sc0').textContent=s.sc[me];$('sc1').textContent=best;
+  $('sc0').className=s.sc[me]>best?'lead':'';$('sc1').className=best>s.sc[me]?'lead':'';
+  $('me0').textContent=mode==='local'?esc(s.names[me]):'SEN';
+  $('oppL').textContent=s.n>2?'EN İYİ':'RAKİP';
+  $('subT').textContent=({bot:'Bot Mod',die:'Die Mod',local:'Yerel Çoklu',online:'Online'}[mode]||'')+' · '+(cfg.type==='score'?'Puanlı':'Klasik')+' · '+cfg.target+' hedefine';
+  $('pchips').innerHTML=opp.map(i=>'<div class="pchip'+(i===s.t&&!s.over?' act':'')+'"><span class="av">'+(s.avatars?s.avatars[i]:'🙂')+'</span>'+esc(s.names[i])+' ×'+s.h[i].length+(s.n>2?' · '+s.sc[i]:'')+'</div>').join('');
+  $('bagChip').textContent='🁢 '+s.bag.length;
+  $('turnName').textContent=s.over?'El bitti':(mine?(mv.length?'Sıra sende — taşı tahtaya sürükle':(s.bag.length?'Hamle yok — pazardan taş çek':'Hamle yok — pas geç')):s.names[s.t]+' oynuyor…');
+  $('hand').innerHTML=s.h[me].map((t,i)=>'<div class="htile'+(mv.some(m=>m[0]===i)?' can':(mine?' dim':''))+(i===sel?' sel':'')+'" data-i="'+i+'">'+bone(t,'vert')+'</div>').join('');
+  const need=mine&&!mv.length&&s.bag.length>0;
+  if(need){if(!pzBusy)openPz()}else if(pzOpen)closePz();
+  $('drawB').disabled=!need;$('passB').disabled=!(mine&&!mv.length&&!s.bag.length);
+  const pk=sel>=0&&mine;$('pickL').style.display=$('pickR').style.display=pk?'':'none';$('drawB').style.display=$('passB').style.display=pk?'none':'';
+  if(s.over&&shown!==s.over){shown=s.over;setTimeout(endScreen,500)}
+}
+function showPassOv(){$('passAv').textContent=s.avatars?s.avatars[s.t]:'🙂';$('passName').textContent=s.names[s.t];$('passOv').classList.add('on')}
+$('passGo').onclick=()=>{$('passOv').classList.remove('on');localLastShown=s.t;pendingLocalSwitch=false;render()};
+function tapTile(i){
+  if(!s||s.over||s.t!==me||$('passOv').classList.contains('on'))return;
+  const mv=moves(me).filter(m=>m[0]===i);
+  if(!mv.length){toast('Bu taş oynanamaz',1);return}
+  if(mv.length===1){sel=-1;doPlay(me,i,mv[0][1]);sync()}else{sel=i;render()}
+}
+function showMk(i){$('fx').insertAdjacentHTML('beforeend',moves(me).filter(m=>m[0]===i).map(m=>{const q=slot(m[1]);return '<div class="mk" data-s="'+m[1]+'" style="left:'+q.l+'px;top:'+q.t+'px;width:'+q.w+'px;height:'+q.h+'px"></div>'}).join(''))}
+function nearMk(e){let best=null,bd=1e9;document.querySelectorAll('.mk').forEach(m=>{const r=m.getBoundingClientRect(),d=Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2));if(d<bd){bd=d;best=m}});return{m:best,d:bd}}
+$('hand').addEventListener('pointerdown',e=>{const t=e.target.closest('.htile');if(!t||!s||s.over||s.t!==me||!e.isPrimary||$('passOv').classList.contains('on'))return;dr={i:+t.dataset.i,sx:e.clientX,sy:e.clientY,src:t,id:e.pointerId,el:null}});
+addEventListener('pointermove',e=>{
+  if(!dr||e.pointerId!==dr.id)return;
+  if(!dr.el){
+    if(Math.hypot(e.clientX-dr.sx,e.clientY-dr.sy)<10)return;
+    if(!moves(me).some(m=>m[0]===dr.i)){toast('Bu taş oynanamaz',1);dr=null;return}
+    const g=document.createElement('div');g.className='dragg';g.innerHTML=bone(s.h[me][dr.i],'vert');document.body.appendChild(g);
+    dr.el=g;dr.src.style.opacity=.3;showMk(dr.i);sel=-1}
+  dr.el.style.left=e.clientX+'px';dr.el.style.top=e.clientY+'px';
+  const n=nearMk(e);document.querySelectorAll('.mk').forEach(m=>m.classList.toggle('hot',m===n.m&&n.d<170));
+});
+function endDrag(e,cancel){
+  const d=dr;dr=null;if(!d)return;
+  if(!d.el){if(!cancel)tapTile(d.i);return}
+  let side=null;
+  if(!cancel){const wr=$('boardWrap').getBoundingClientRect();if(e.clientY<wr.bottom+30&&e.clientY>wr.top-30){const n=nearMk(e);if(n.m)side=n.m.dataset.s}}
+  d.el.remove();d.src.style.opacity='';document.querySelectorAll('.mk').forEach(m=>m.remove());
+  if(side){sel=-1;doPlay(me,d.i,side);sync()}
+}
+addEventListener('pointerup',e=>{if(dr&&e.pointerId===dr.id)endDrag(e,false)});
+addEventListener('pointercancel',e=>{if(dr&&e.pointerId===dr.id)endDrag(e,true)});
+function openPz(){pzOpen=true;const n=s.bag.length;$('pzS').textContent='Bir tane seç — '+n+' kaldı';$('pzGrid').innerHTML=Array.from({length:n},()=>'<div class="pzt"></div>').join('');$('pz').classList.add('on')}
+function closePz(){pzOpen=false;$('pz').classList.remove('on')}
+$('pzGrid').onclick=e=>{const x=e.target.closest('.pzt');if(!x||pzBusy||!s||s.t!==me)return;pzBusy=true;x.classList.add('flip');
+  setTimeout(()=>{pzBusy=false;if(s&&s.t===me&&s.bag.length){drawT(me);sync()}},380)};
+function endScreen(){
+  const o=s.over,done=s.sc.some(x=>x>=cfg.target);
+  let t=o.w<0?'BERABERE':(o.w===me?'🎉 KAZANDIN!':(mode==='die'?'💀 ÖLDÜN':'KAYBETTİN'));
+  if(o.w>=0&&o.w!==me&&s.n>2)t=esc(s.names[o.w])+' KAZANDI';
+  ov('<h2 class="disp" style="font-size:26px;color:'+(o.w===me?'var(--gold)':'var(--red)')+'">'+t+'</h2><p style="margin-top:12px;font-weight:800">'+(o.pts?'+'+o.pts+' puan<br>':'')+s.names.map((n,i)=>esc(n)+': '+s.sc[i]).join(' • ')+(done?'<br><b>MAÇ BİTTİ!</b>':'')+'</p>',
+    (mode==='online'&&!isHost)?'Ev sahibi bekleniyor…':(done?'YENİ MAÇ':'SONRAKİ EL'),()=>{
+      if(mode==='online'&&!isHost)return;
+      if(done)recordMatch(o.w===0,s.sc[0]);
+      closeOv();shown=null;sel=-1;newRound(done?s.names.map(()=>0):s.sc);sync()},true);
+  if(o.w===me){confetti();vib([30,40,30])}
+  if(mode==='online'&&!isHost)$('ovBtn').disabled=true;
+}
+function ov(html,btn,fn,menu){$('ovBody').innerHTML=html;$('ovBtn').textContent=btn;$('ovBtn').disabled=false;$('ovBtn').onclick=fn;$('ovBtn2').style.display=menu?'':'none';$('ov').classList.add('on')}
+function closeOv(){$('ov').classList.remove('on')}
+/* --- başlatma --- */
+function readType(id){return segVal(id,'v')}
+function readTarget(id){return+segVal(id,'t')}
+function startSolo(m,name,d){
+  mode=m;diff=d||'pro';
+  if(m==='die'){cfg={n:2,names:[name||'SEN','ÖLÜM BOTU'],avatars:[avVal('dieAv'),'💀'],type:'score',target:100}}
+  else{cfg={n:2,names:[name||'SEN','BOT'],avatars:[avVal('botAv'),'🤖'],type:readType('botType'),target:readTarget('botTarget')}}
+  me=0;sel=-1;shown=null;closeOv();newRound();show('game');sync();
+}
+function startLocal(){
+  const n=+segVal('locN','n'),names=[],avatars=[];
+  $('locNames').querySelectorAll('.namerow').forEach(row=>{avatars.push(row.querySelector('.av').dataset.a);names.push(row.querySelector('.inp').value.trim()||('Oyuncu '+(names.length+1)))});
+  mode='local';cfg={n,names,avatars,type:readType('locType'),target:readTarget('locTarget')};
+  me=0;sel=-1;shown=null;closeOv();newRound();show('game');sync();
+}
+function leave(){offs.forEach(f=>f());offs=[];clearInterval(hiTimer);if(room&&room.leave)try{room.leave()}catch(e){}room=null;lob=null;ids=[];isHost=false}
+function quitGame(){leave();s=null;mode='';closeOv();document.body.classList.remove('danger');$('passOv').classList.remove('on');show('modes')}
+/* --- online --- */
+const rc=()=>[...Array(4)].map(()=>'ABCDEFGHJKMNPQRSTUVWXYZ23456789'[Math.random()*31|0]).join('');
+async function openRoom(code){
+  leave();
+  try{const R=await claude.use('room');if(!R){toast('Online mod bu görünümde kullanılamıyor',1);return false}room=await R.join('d'+code.toLowerCase())}catch(e){toast('Bağlantı kurulamadı',1);return false}
+  offs.push(room.on('g',m=>onMsg(m.data)));return true;
+}
+function showLobby(){
+  $('roomCodeBig').textContent=lob.code;$('lobbyTitle').textContent=(lob.name||'ODA').toUpperCase();
+  let h='';for(let i=0;i<lob.max;i++){const p=lob.players[i];h+=p?'<div class="seat"><span class="av">'+p.av+'</span>'+esc(p.name)+(i===0?' 👑':'')+(p.id===myId?' (sen)':'')+'</div>':'<div class="seat empty">Bekleniyor…</div>'}
+  $('seats').innerHTML=h;$('btnStart').style.display=isHost?'':'none';$('btnStart').disabled=lob.players.length<2;
+  $('lobbyNote').textContent=(isHost?'Kodu arkadaşlarınla paylaş'+(lob.pass?' (şifre: '+esc(lob.pass)+')':'')+'. En az 2 kişi gerekli.':'Ev sahibinin başlatması bekleniyor…')+' · '+(lob.type==='score'?'Puanlı':'Klasik')+' · '+lob.target+' hedefine';
+  show('lobby');
+}
+function bcast(){room.emit('g',{t:'lobby',from:myId,lob:{code:lob.code,name:lob.name,max:lob.max,players:lob.players,pass:lob.pass,type:lob.type,target:lob.target}}).catch(()=>{})}
+function onMsg(d){
+  if(!d||d.from===myId)return;
+  if(d.t==='hi'&&isHost&&!s){
+    if(lob.pass&&d.pass!==lob.pass){room.emit('g',{t:'deny',to:d.from,why:'Şifre yanlış',from:myId});return}
+    if(!lob.players.some(p=>p.id===d.from)){
+      if(lob.players.length>=lob.max){room.emit('g',{t:'deny',to:d.from,why:'Oda dolu',from:myId});return}
+      lob.players.push({id:d.from,name:d.name,av:d.av})}
+    showLobby();bcast();
+  }else if(d.t==='deny'&&d.to===myId){clearInterval(hiTimer);leave();toast(d.why,1);show('online')}
+  else if(d.t==='lobby'&&!isHost&&d.lob.players.some(p=>p.id===myId)){clearInterval(hiTimer);lob=d.lob;showLobby()}
+  else if(d.t==='st'&&d.ids&&d.ids.includes(myId)&&d.ids.includes(d.from)){
+    if(!s||mode!=='online'){mode='online';ids=d.ids;me=ids.indexOf(myId);show('game')}
+    s=d.s;sel=-1;render();
+  }
+}
+async function createRoom(){
+  myName=($('onlName').value||'SEN').trim();
+  const code=rc();if(!await openRoom(code))return;
+  isHost=true;lob={code,name:$('roomName').value||'Oda',pass:$('roomPass').value.trim(),max:+segVal('roomMax','m'),type:readType('roomType'),target:readTarget('roomTarget'),players:[{id:myId,name:myName,av:avVal('onlAv')}]};
+  showLobby();
+}
+async function joinRoom(){
+  myName=($('onlName').value||'SEN').trim();
+  const code=$('joinCode').value.trim().toUpperCase();if(code.length<4){toast('4 haneli kodu gir',1);return}
+  if(!await openRoom(code))return;
+  isHost=false;const pass=$('joinPass').value.trim(),av=avVal('onlAv');let n=0;
+  const hi=()=>{if(++n>8){clearInterval(hiTimer);leave();toast('Oda bulunamadı',1);show('online');return}room.emit('g',{t:'hi',from:myId,name:myName,pass,av}).catch(()=>{})};
+  hi();hiTimer=setInterval(hi,1000);toast('Odaya bağlanılıyor…');
+}
+function startOnline(){
+  ids=lob.players.map(p=>p.id);me=0;mode='online';shown=null;sel=-1;
+  cfg={n:ids.length,names:lob.players.map(p=>p.name),avatars:lob.players.map(p=>p.av),type:lob.type,target:lob.target};
+  show('game');newRound();sync();
+}
+/* --- olaylar --- */
+document.querySelectorAll('.back').forEach(b=>b.onclick=()=>show(b.dataset.to));
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
+$('btnPlay').onclick=()=>show('modes');
+$('btnSnd').onclick=()=>{snd=!snd;$('btnSnd').textContent=snd?'🔊 Ses':'🔇 Ses';beep(600)};
+$('btnHow').onclick=()=>ov('<h2 class="disp" style="font-size:22px;margin-bottom:8px">NASIL OYNANIR?</h2><ul id="howList"><li>Herkese 7 taş dağıtılır; en büyük çift olan başlar.</li><li>Sıra sende: tahtadaki uçlardan biriyle aynı sayıya sahip taşı sürükleyip bırak.</li><li>Oynayacak taşın yoksa pazardan bir taş seç, deste bittiyse pas geç.</li><li>Elini ilk bitiren o eli kazanır; kilitlenirse toplamı en düşük olan kazanır.</li><li>Eli bitiren, rakiplerin elindeki taşların toplamını puan olarak alır.</li><li><b>Klasik</b> modda sadece bu puanlar sayılır. <b>Puanlı</b> modda ayrıca, taşı koyunca tahtanın iki ucunun toplamı beşin katıysa (5, 10, 15…) o kadar bonus puan da kazanırsın.</li><li>Hedef puana (100 / 200 / 365) ilk ulaşan maçı kazanır.</li><li>⏱ Her tur 10-29 sn arası rastgele süren var; süre dolarsa sıra rakibe geçer.</li><li>💀 Die Mod: hamle başına sadece 6 saniye!</li><li>👥 Yerel Çoklu: aynı cihazı elden ele vererek 2-4 kişi oynayabilir.</li></ul>','TAMAM',closeOv,false);
+$('botStart').onclick=()=>startSolo('bot',$('botName').value.trim(),segVal('botDiff','d'));
+$('dieStart').onclick=()=>startSolo('die',$('dieName').value.trim());
+$('locStart').onclick=startLocal;
+$('tabJoin').onclick=()=>{$('tabJoin').classList.add('sel');$('tabCreate').classList.remove('sel');$('joinPane').style.display='';$('createPane').style.display='none'};
+$('tabCreate').onclick=()=>{$('tabCreate').classList.add('sel');$('tabJoin').classList.remove('sel');$('createPane').style.display='';$('joinPane').style.display='none'};
+$('btnCreate').onclick=createRoom;$('btnJoin').onclick=joinRoom;$('btnStart').onclick=startOnline;
+$('lobbyBack').onclick=()=>{leave();show('online')};
+$('gQuit').onclick=()=>ov('<h2 class="disp" style="font-size:22px">OYUNDAN ÇIKILSIN MI?</h2><p style="margin-top:10px;font-weight:700;color:var(--dim)">Oyun kaybedilmiş sayılır.</p>','DEVAM ET',closeOv,true);
+$('ovBtn2').onclick=quitGame;$('gHelp').onclick=()=>$('btnHow').onclick();
+$('drawB').onclick=()=>{if(s&&s.t===me&&s.bag.length)openPz()};
+$('passB').onclick=()=>{passT(me);sync()};
+$('pickL').onclick=()=>{const i=sel;sel=-1;doPlay(me,i,'L');sync()};
+$('pickR').onclick=()=>{const i=sel;sel=-1;doPlay(me,i,'R');sync()};
+</script></body></html>
